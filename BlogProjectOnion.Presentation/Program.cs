@@ -3,7 +3,9 @@ using BlogProjectOnion.Domain.Entities;
 using BlogProjectOnion.Infrastructure.Context;
 using BlogProjectOnion.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using NToastNotify;
+using System.Configuration;
 
 namespace BlogProjectOnion.Presentation
 {
@@ -12,13 +14,15 @@ namespace BlogProjectOnion.Presentation
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddHttpClient();
-            builder.Services.AddAuthorization();
-            builder.Services.LoadDataLayerExtension(builder.Configuration);
-            builder.Services.LoadServiceLayerExtension();
-            builder.Services.AddSession();
-            // Add services to the container.
-            builder.Services.AddControllersWithViews().AddNToastNotifyToastr(new ToastrOptions()
+			builder.Services.AddHttpClient();
+			builder.Services.AddAuthorization();
+
+			builder.Services.LoadDataLayerExtension(builder.Configuration);
+			builder.Services.LoadServiceLayerExtension();
+			builder.Services.AddSession();
+			
+			// Add services to the container.
+			builder.Services.AddControllersWithViews().AddNToastNotifyToastr(new ToastrOptions()
             {
                 PositionClass = ToastPositions.TopRight,
                 TimeOut = 3000,

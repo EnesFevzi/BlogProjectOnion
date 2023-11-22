@@ -15,9 +15,9 @@ namespace BlogProjectOnion.Presentation.Controllers
         private readonly UserManager<AppUser> userManager;
         private readonly SignInManager<AppUser> signInManager;
         private readonly IMapper _mapper;
-        private readonly IValidator<UserLoginVM> _loginValidator;
+        private readonly IValidator<CreateUserDto> _loginValidator;
 
-        public AuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMapper mapper, IValidator<UserLoginVM> loginValidator)
+        public AuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMapper mapper, IValidator<CreateUserDto> loginValidator)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -49,8 +49,8 @@ namespace BlogProjectOnion.Presentation.Controllers
                         }
                         if (roles.Contains(RoleConsts.User))
                         {
-                            return RedirectToAction("Index", "Dashboard");
-                        }
+							return RedirectToAction("Index", "Dashboard", new { Area = "Admin" });
+						}
                     }
                     else
                     {
@@ -82,8 +82,8 @@ namespace BlogProjectOnion.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(CreateUserDto createUserDto)
         {
-            var result = await _loginValidator.ValidateAsync(map);
-            if (!ModelState.IsValid)
+            var validator = await _loginValidator.ValidateAsync(createUserDto);
+            if (!validator.IsValid)
             {
                 return View();
             }
@@ -95,15 +95,13 @@ namespace BlogProjectOnion.Presentation.Controllers
             }
             if (createUserDto.Password == createUserDto.ConfirmPassword)
             {
-
                 var appUser = _mapper.Map<AppUser>(createUserDto);
                 appUser.UserName = createUserDto.EMail;
                 var result = await userManager.CreateAsync(appUser, createUserDto.Password);
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(appUser, "User");
-
-                    return RedirectToAction("UserDashboard", "Dashboard");
+                    await userManager.AddToRoleAsync(appUser, RoleConsts.User);
+                    return RedirectToAction("Login", "Auth");
                 }
 
                 ModelState.AddModelError("", "E-posta adresiniz veya şifreniz yanlıştır.");

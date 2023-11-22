@@ -21,6 +21,7 @@ namespace BlogProjectOnion.Infrastructure.Context
         public DbSet<Like> Likes { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
