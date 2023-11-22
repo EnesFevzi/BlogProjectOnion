@@ -1,35 +1,52 @@
-﻿using BlogProjectOnion.Application.DTOs.LikeDTOs;
+﻿using AutoMapper;
+using BlogProjectOnion.Application.DTOs.GenreDTOs;
+using BlogProjectOnion.Application.DTOs.LikeDTOs;
 using BlogProjectOnion.Application.Services.Abstract;
+using BlogProjectOnion.Domain.Entities;
+using BlogProjectOnion.Infrastructure.UnitOfWorks;
 
 namespace BlogProjectOnion.Application.Services.Concrete
 {
     public class LikeService : ILikeService
     {
 
+        private readonly IUnıtOfWork _unıtOfWork;
+        private readonly IMapper _mapper;
 
-        public Task CreateLikeAsync(LikeAddDto likeAddDto)
+        public LikeService(IUnıtOfWork unıtOfWork, IMapper mapper)
+        {
+            _unıtOfWork = unıtOfWork;
+            _mapper = mapper;
+        }
+        public Task CreateLikeAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task CreateLikeWithoutImageAsync(LikeAddDto likeAddDto)
+        public Task CreateLikeWithoutImageAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<LikeDto>> GetAllLikesDeletedAsync()
+        public async Task<List<LikeDto>> GetAllLikesDeletedAsync()
         {
-            throw new NotImplementedException();
+            var experiences = await _unıtOfWork.GetRepository<Genre>().GetAllAsync(x => x.Status == Domain.Enums.Status.Passive);
+            var map = _mapper.Map<List<LikeDto>>(experiences);
+            return map;
         }
 
-        public Task<List<LikeDto>> GetAllLikesNonDeletedAsync()
+        public async Task<List<LikeDto>> GetAllLikesNonDeletedAsync()
         {
-            throw new NotImplementedException();
+            var experiences = await _unıtOfWork.GetRepository<Genre>().GetAllAsync(x => x.Status == Domain.Enums.Status.Active);
+            var map = _mapper.Map<List<LikeDto>>(experiences);
+            return map;
         }
 
-        public Task<LikeDto> GetLikeNonDeletedAsync(int likeID)
+        public async Task<LikeDto> GetLikeNonDeletedAsync(int likeID)
         {
-            throw new NotImplementedException();
+            var experiences = await _unıtOfWork.GetRepository<Like>().GetAsync(x => x.Status == Domain.Enums.Status.Active && x.LikeID == likeID);
+            var map = _mapper.Map<LikeDto>(experiences);
+            return map;
         }
 
         public Task<string> SafeDeleteLikeAsync(int likeID)

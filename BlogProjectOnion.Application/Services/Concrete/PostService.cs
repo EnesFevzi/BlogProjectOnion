@@ -1,5 +1,9 @@
-﻿using BlogProjectOnion.Application.DTOs.PostDTOs;
+﻿using AutoMapper;
+using BlogProjectOnion.Application.DTOs.GenreDTOs;
+using BlogProjectOnion.Application.DTOs.PostDTOs;
 using BlogProjectOnion.Application.Services.Abstract;
+using BlogProjectOnion.Domain.Entities;
+using BlogProjectOnion.Infrastructure.UnitOfWorks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +14,19 @@ namespace BlogProjectOnion.Application.Services.Concrete
 {
     public class PostService : IPostService
     {
-        public Task CreatePostAsync(PostAddDto postAddDto)
+        private readonly IUnıtOfWork _unıtOfWork;
+        private readonly IMapper _mapper;
+
+        public PostService(IUnıtOfWork unıtOfWork, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _unıtOfWork = unıtOfWork;
+            _mapper = mapper;
+        }
+        public async Task CreatePostAsync(PostAddDto postAddDto)
+        {
+            var map = _mapper.Map<Post>(postAddDto);
+            await _unıtOfWork.GetRepository<Post>().CreateAsync(map);
+            await _unıtOfWork.SaveAsync();
         }
 
         public Task CreatePostWithoutImageAsync(PostAddDto postAddDto)
@@ -20,34 +34,58 @@ namespace BlogProjectOnion.Application.Services.Concrete
             throw new NotImplementedException();
         }
 
-        public Task<List<PostDto>> GetAllPostsDeletedAsync()
+        public async Task<List<PostDto>> GetAllPostsDeletedAsync()
         {
-            throw new NotImplementedException();
+            var experiences = await _unıtOfWork.GetRepository<Post>().GetAllAsync(x => x.Status == Domain.Enums.Status.Passive);
+            var map = _mapper.Map<List<PostDto>>(experiences);
+            return map;
         }
 
-        public Task<List<PostDto>> GetAllPostsNonDeletedAsync()
+        public async Task<List<PostDto>> GetAllPostsNonDeletedAsync()
         {
-            throw new NotImplementedException();
+            var experiences = await _unıtOfWork.GetRepository<Post>().GetAllAsync(x => x.Status == Domain.Enums.Status.Active);
+            var map = _mapper.Map<List<PostDto>>(experiences);
+            return map;
         }
 
-        public Task<PostDto> GetPostNonDeletedAsync(int postID)
+        public async Task<PostDto> GetPostNonDeletedAsync(int postID)
         {
-            throw new NotImplementedException();
+            var experiences = await _unıtOfWork.GetRepository<Post>().GetAsync(x => x.Status == Domain.Enums.Status.Active && x.PostID == postID);
+            var map = _mapper.Map<PostDto>(experiences);
+            return map;
         }
 
-        public Task<string> SafeDeletePostAsync(int postID)
+        public async Task<string> SafeDeletePostAsync(int postID)
         {
-            throw new NotImplementedException();
+            var experience = await _unıtOfWork.GetRepository<Genre>().GetByIDAsync(postID);
+            experience.Status = Domain.Enums.Status.Passive;
+            await _unıtOfWork.GetRepository<Genre>().DeleteAsync(experience);
+            await _unıtOfWork.SaveAsync();
+
+            return experience.Name;
         }
 
-        public Task<string> UndoDeletePostAsync(int postID)
+        public async Task<string> UndoDeletePostAsync(int postID)
         {
-            throw new NotImplementedException();
+            var experience = await _unıtOfWork.GetRepository<Genre>().GetByIDAsync(postID);
+            experience.Status = Domain.Enums.Status.Active;
+            await _unıtOfWork.GetRepository<Genre>().DeleteAsync(experience);
+            await _unıtOfWork.SaveAsync();
+
+            return experience.Name;
         }
 
-        public Task<string> UpdatePostAsync(PostUpdateDto postUpdateDto)
+        public async Task<string> UpdatePostAsync(PostUpdateDto postUpdateDto)
         {
-            throw new NotImplementedException();
+            var experience = await _unıtOfWork.GetRepository<Post>().GetAsync(x => x.Status == Domain.Enums.Status.Active && x.PostID == postUpdateDto.PostID);
+
+            var map = _mapper.Map(postUpdateDto, experience);
+
+            experience.Status = Domain.Enums.Status.Modified;
+            await _unıtOfWork.GetRepository<Post>().UpdateAsync(experience);
+            await _unıtOfWork.SaveAsync();
+
+            return experience.Title;
         }
     }
 }

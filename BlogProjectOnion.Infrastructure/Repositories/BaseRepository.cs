@@ -15,15 +15,17 @@ namespace BlogProjectOnion.Infrastructure.Repositories
     public class BaseRepository<T> : IBaseRepository<T> where T : class, IBaseEntity
     {
         private readonly AppDbContext _dbContext;
+        protected readonly DbSet<T> table;
         public BaseRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
+           // table = _dbContext.Set<T>();
         }
 
         private DbSet<T> Table { get => _dbContext.Set<T>(); }
-        public Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return await Table.AnyAsync(predicate);
         }
 
         public async Task CreateAsync(T entity)
@@ -34,12 +36,13 @@ namespace BlogProjectOnion.Infrastructure.Repositories
 
         public async Task DeleteAsync(T entity)
         {
-            Table.Remove(entity);
+            //Table.Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
         public async Task UpdateAsync(T entity)
         {
-            Table.Update(entity);
+            //Table.Update(entity);
+            _dbContext.Entry<T>(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
         }
 
@@ -99,14 +102,34 @@ namespace BlogProjectOnion.Infrastructure.Repositories
             return await Table.FindAsync(id);
         }
 
-        public Task<TResult> GetFilteredFirstOrDefault<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>> where, Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public async Task<TResult> GetFilteredFirstOrDefault<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>> where, Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = Table;
+            if (where != null)
+                query = query.Where(where);
+            if (include!=null)
+                query = include(query);
+            if (orderby!=null)
+                return await orderby(query).Select(select).FirstOrDefaultAsync();
+            else
+                return await query.Select(select).FirstOrDefaultAsync();
+
+
+
+
         }
 
-        public Task<List<TResult>> GetFilteredList<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>> where, Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public async Task<List<TResult>> GetFilteredList<TResult>(Expression<Func<T, TResult>> select, Expression<Func<T, bool>> where, Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = Table;
+            if (where != null)
+                query = query.Where(where);
+            if (include != null)
+                query = include(query);
+            if (orderby != null)
+                return await orderby(query).Select(select).ToListAsync();
+            else
+                return await query.Select(select).ToListAsync();
         }
 
 

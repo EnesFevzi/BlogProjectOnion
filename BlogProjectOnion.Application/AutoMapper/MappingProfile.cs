@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BlogProjectOnion.Application.DTOs.AppUserDto;
 using BlogProjectOnion.Application.DTOs.AuthorDTOs;
 using BlogProjectOnion.Application.DTOs.CommentDTOs;
 using BlogProjectOnion.Application.DTOs.GenreDTOs;
@@ -17,6 +18,8 @@ namespace BlogProjectOnion.Application.AutoMapper
             CreateMap<AuthorUpdateDto, Author>().ReverseMap();
             CreateMap<AuthorUpdateDto, AuthorDto>().ReverseMap();
 
+            CreateMap<CreateUserDto, AppUser>().ReverseMap();
+
 
             CreateMap<CommentDto, Comment>().ReverseMap();
             CreateMap<CommentAddDto, Comment>().ReverseMap();
@@ -31,7 +34,6 @@ namespace BlogProjectOnion.Application.AutoMapper
 
 
             CreateMap<LikeDto, Like>().ReverseMap();
-            CreateMap<LikeAddDto, Like>().ReverseMap();
             CreateMap<LikeUpdateDto, Like>().ReverseMap();
             CreateMap<LikeUpdateDto, LikeDto>().ReverseMap();
 

@@ -22,7 +22,7 @@ namespace BlogProjectOnion.Application.Services.Concrete
             _mapper = mapper;
         }
 
-        public  async Task CreateAuthorAsync(AuthorAddDto aboutAddDto)
+        public async Task CreateAuthorAsync(AuthorAddDto aboutAddDto)
         {
             var map = _mapper.Map<Author>(aboutAddDto);
             await _unıtOfWork.GetRepository<Author>().CreateAsync(map);
@@ -34,34 +34,58 @@ namespace BlogProjectOnion.Application.Services.Concrete
             throw new NotImplementedException();
         }
 
-        public Task<List<AuthorDto>> GetAllAuthorsDeletedAsync()
+        public async Task<List<AuthorDto>> GetAllAuthorsDeletedAsync()
         {
-            throw new NotImplementedException();
+            var experiences = await _unıtOfWork.GetRepository<Author>().GetAllAsync(x => x.Status == Domain.Enums.Status.Passive);
+            var map = _mapper.Map<List<AuthorDto>>(experiences);
+            return map;
         }
 
-        public Task<List<AuthorDto>> GetAllAuthorsNonDeletedAsync()
+        public async Task<List<AuthorDto>> GetAllAuthorsNonDeletedAsync()
         {
-            throw new NotImplementedException();
+            var experiences = await _unıtOfWork.GetRepository<Author>().GetAllAsync(x => x.Status == Domain.Enums.Status.Active);
+            var map = _mapper.Map<List<AuthorDto>>(experiences);
+            return map;
         }
 
-        public Task<AuthorDto> GetAuthorNonDeletedAsync(int authorID)
+        public async Task<AuthorDto> GetAuthorNonDeletedAsync(int authorID)
         {
-            throw new NotImplementedException();
+            var experiences = await _unıtOfWork.GetRepository<Author>().GetAsync(x => x.Status == Domain.Enums.Status.Active &&x.AuthorID== authorID);
+            var map = _mapper.Map<AuthorDto>(experiences);
+            return map;
         }
 
-        public Task<string> SafeDeleteAuthorAsync(int authorID)
+        public async Task<string> SafeDeleteAuthorAsync(int authorID)
         {
-            throw new NotImplementedException();
+            var experience = await _unıtOfWork.GetRepository<Author>().GetByIDAsync(authorID);
+            experience.Status = Domain.Enums.Status.Passive;
+            await _unıtOfWork.GetRepository<Author>().DeleteAsync(experience);
+            await _unıtOfWork.SaveAsync();
+
+            return experience.FirstName;
         }
 
-        public Task<string> UndoDeleteAuthorAsync(int authorID)
+        public async Task<string> UndoDeleteAuthorAsync(int authorID)
         {
-            throw new NotImplementedException();
+            var experience = await _unıtOfWork.GetRepository<Author>().GetByIDAsync(authorID);
+            experience.Status = Domain.Enums.Status.Passive;
+            await _unıtOfWork.GetRepository<Author>().DeleteAsync(experience);
+            await _unıtOfWork.SaveAsync();
+
+            return experience.FirstName;
         }
 
-        public Task<string> UpdateAuthorAsync(AuthorUpdateDto aboutUpdateDto)
+        public async Task<string> UpdateAuthorAsync(AuthorUpdateDto aboutUpdateDto)
         {
-            throw new NotImplementedException();
+            var experience = await _unıtOfWork.GetRepository<Author>().GetAsync(x => x.Status==Domain.Enums.Status.Active && x.AuthorID == aboutUpdateDto.AuthorID);
+
+            var map = _mapper.Map(aboutUpdateDto, experience);
+
+            experience.Status = Domain.Enums.Status.Modified;
+            await _unıtOfWork.GetRepository<Author>().UpdateAsync(experience);
+            await _unıtOfWork.SaveAsync();
+
+            return experience.FirstName;
         }
     }
 }

@@ -1,7 +1,12 @@
-﻿using BlogProjectOnion.Application.DTOs.GenreDTOs;
+﻿using AutoMapper;
+using BlogProjectOnion.Application.DTOs.CommentDTOs;
+using BlogProjectOnion.Application.DTOs.GenreDTOs;
 using BlogProjectOnion.Application.Services.Abstract;
+using BlogProjectOnion.Domain.Entities;
+using BlogProjectOnion.Infrastructure.UnitOfWorks;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +15,19 @@ namespace BlogProjectOnion.Application.Services.Concrete
 {
     public class GenreService : IGenreService
     {
-        public Task CreateGenreAsync(GenreAddDto genreAddDto)
+        private readonly IUnıtOfWork _unıtOfWork;
+        private readonly IMapper _mapper;
+
+        public GenreService(IUnıtOfWork unıtOfWork, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _unıtOfWork = unıtOfWork;
+            _mapper = mapper;
+        }
+        public async  Task CreateGenreAsync(GenreAddDto genreAddDto)
+        {
+            var map = _mapper.Map<Genre>(genreAddDto);
+            await _unıtOfWork.GetRepository<Genre>().CreateAsync(map);
+            await _unıtOfWork.SaveAsync();
         }
 
         public Task CreateGenreWithoutImageAsync(GenreAddDto genreAddDto)
@@ -20,34 +35,58 @@ namespace BlogProjectOnion.Application.Services.Concrete
             throw new NotImplementedException();
         }
 
-        public Task<List<GenreDto>> GetAllGenresDeletedAsync()
+        public async Task<List<GenreDto>> GetAllGenresDeletedAsync()
         {
-            throw new NotImplementedException();
+            var experiences = await _unıtOfWork.GetRepository<Genre>().GetAllAsync(x => x.Status == Domain.Enums.Status.Passive);
+            var map = _mapper.Map<List<GenreDto>>(experiences);
+            return map;
         }
 
-        public Task<List<GenreDto>> GetAllGenresNonDeletedAsync()
+        public  async Task<List<GenreDto>> GetAllGenresNonDeletedAsync()
         {
-            throw new NotImplementedException();
+            var experiences = await _unıtOfWork.GetRepository<Genre>().GetAllAsync(x => x.Status == Domain.Enums.Status.Active);
+            var map = _mapper.Map<List<GenreDto>>(experiences);
+            return map;
         }
 
-        public Task<GenreDto> GetGenreNonDeletedAsync(int GenreID)
+        public async Task<GenreDto> GetGenreNonDeletedAsync(int GenreID)
         {
-            throw new NotImplementedException();
+            var experiences = await _unıtOfWork.GetRepository<Genre>().GetAsync(x => x.Status == Domain.Enums.Status.Active && x.GenreID == GenreID);
+            var map = _mapper.Map<GenreDto>(experiences);
+            return map;
         }
 
-        public Task<string> SafeDeleteGenreAsync(int genreID)
+        public async Task<string> SafeDeleteGenreAsync(int genreID)
         {
-            throw new NotImplementedException();
+            var experience = await _unıtOfWork.GetRepository<Genre>().GetByIDAsync(genreID);
+            experience.Status = Domain.Enums.Status.Passive;
+            await _unıtOfWork.GetRepository<Genre>().DeleteAsync(experience);
+            await _unıtOfWork.SaveAsync();
+
+            return experience.Name;
         }
 
-        public Task<string> UndoDeleteGenreAsync(int genreID)
+        public async Task<string> UndoDeleteGenreAsync(int genreID)
         {
-            throw new NotImplementedException();
+            var experience = await _unıtOfWork.GetRepository<Genre>().GetByIDAsync(genreID);
+            experience.Status = Domain.Enums.Status.Active;
+            await _unıtOfWork.GetRepository<Genre>().DeleteAsync(experience);
+            await _unıtOfWork.SaveAsync();
+
+            return experience.Name;
         }
 
-        public Task<string> UpdateGenreAsync(GenreUpdateDto genreUpdateDto)
+        public async Task<string> UpdateGenreAsync(GenreUpdateDto genreUpdateDto)
         {
-            throw new NotImplementedException();
+            var experience = await _unıtOfWork.GetRepository<Genre>().GetAsync(x => x.Status == Domain.Enums.Status.Active && x.GenreID == genreUpdateDto.GenreID);
+
+            var map = _mapper.Map(genreUpdateDto, experience);
+
+            experience.Status = Domain.Enums.Status.Modified;
+            await _unıtOfWork.GetRepository<Genre>().UpdateAsync(experience);
+            await _unıtOfWork.SaveAsync();
+
+            return experience.Name;
         }
     }
 }

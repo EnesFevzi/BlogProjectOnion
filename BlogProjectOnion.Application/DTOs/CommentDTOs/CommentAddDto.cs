@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlogProjectOnion.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,7 @@ namespace BlogProjectOnion.Application.DTOs.CommentDTOs
     public class CommentAddDto
     {
         public string Content { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
+        public Status Status = Status.Active;
     }
 }

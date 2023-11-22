@@ -17,6 +17,7 @@ namespace BlogProjectOnion.Infrastructure.EntityTypeConfig
             builder.Property(x => x.UpdateDate).IsRequired(false);
             builder.Property(x => x.DeletedDate).IsRequired(false);
             builder.Property(x => x.Status).IsRequired(true);
+
         }
     }
 }

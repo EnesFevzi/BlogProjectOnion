@@ -14,6 +14,7 @@ namespace BlogProjectOnion.Infrastructure.EntityTypeConfig
         {
             builder.Property(x => x.FirstName).IsRequired(true);
             builder.Property(x => x.LastName).IsRequired(true);
+            base.Configure(builder);
         }
     }
 }

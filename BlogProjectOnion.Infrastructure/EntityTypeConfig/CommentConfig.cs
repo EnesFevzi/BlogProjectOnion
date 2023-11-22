@@ -13,6 +13,7 @@ namespace BlogProjectOnion.Infrastructure.EntityTypeConfig
         public override void Configure(EntityTypeBuilder<Comment> builder)
         {
             builder.Property(x => x.Content).IsRequired(true);
+            base.Configure(builder);
         }
     }
 }

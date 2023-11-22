@@ -26,6 +26,8 @@ namespace BlogProjectOnion.Infrastructure.EntityTypeConfig
                 .HasForeignKey(l => l.AppUserID)
                 .IsRequired();
 
+            builder.Property(x => x.UserName).IsRequired(true);
+            base.Configure(builder);
 
         }
     }

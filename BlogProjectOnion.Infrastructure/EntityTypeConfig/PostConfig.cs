@@ -27,6 +27,7 @@ namespace BlogProjectOnion.Infrastructure.EntityTypeConfig
                 .WithMany(g => g.Posts)
                 .HasForeignKey(p => p.GenreID)
                 .IsRequired();
+            base.Configure(builder);
         }
     }
 }

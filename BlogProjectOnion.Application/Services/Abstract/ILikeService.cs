@@ -12,8 +12,8 @@ namespace BlogProjectOnion.Application.Services.Abstract
         Task<List<LikeDto>> GetAllLikesNonDeletedAsync();
         Task<List<LikeDto>> GetAllLikesDeletedAsync();
         Task<LikeDto> GetLikeNonDeletedAsync(int likeID);
-        Task CreateLikeAsync(LikeAddDto likeAddDto);
-        Task CreateLikeWithoutImageAsync(LikeAddDto likeAddDto);
+        //Task CreateLikeAsync(LikeAddDto likeAddDto);
+        //Task CreateLikeWithoutImageAsync(LikeAddDto likeAddDto);
         Task<string> UpdateLikeAsync(LikeUpdateDto likeUpdateDto);
         Task<string> SafeDeleteLikeAsync(int likeID);
         Task<string> UndoDeleteLikeAsync(int likeID);
