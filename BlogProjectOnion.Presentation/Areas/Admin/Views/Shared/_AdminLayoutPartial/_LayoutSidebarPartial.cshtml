@@ -42,15 +42,16 @@
 					<p>Siteye Git</p>
 				</a>
 			</li>
+			
 			<li class="nav-item">
 				<a asp-action="Index" asp-controller="Post" asp-area="Admin">
 					<i class="la la-dashboard"></i>
-					<p>Makalelerim</p>
+					<p>Gönderilerim</p>
 					<span class="badge badge-count">5</span>
 				</a>
 			</li>
 			<li class="nav-item">
-				<a asp-action="Index" asp-controller="Post" asp-area="Admin">
+				<a asp-action="Index" asp-controller="Genre" asp-area="Admin">
 					<i class="la la-music"></i>
 					<p>Kategoriler</p>
 				</a>
@@ -61,7 +62,12 @@
 					<p>Çıkış Yap</p>
 				</a>
 			</li>
-
+			<li class="nav-item">
+				<a asp-area="Admin" asp-controller="Genre" asp-action="DeletedGenre">
+					<i class="la la-plane"></i>
+					<p>Silinmiş Kategoriler</p>
+				</a>
+			</li>
 		</ul>
 	</div>
 </div>

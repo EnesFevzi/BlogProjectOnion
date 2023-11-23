@@ -23,7 +23,7 @@ namespace BlogProjectOnion.Application.Services.Concrete
             _unıtOfWork = unıtOfWork;
             _mapper = mapper;
         }
-        public async  Task CreateGenreAsync(GenreAddDto genreAddDto)
+        public async Task CreateGenreAsync(GenreAddDto genreAddDto)
         {
             var map = _mapper.Map<Genre>(genreAddDto);
             await _unıtOfWork.GetRepository<Genre>().CreateAsync(map);
@@ -42,9 +42,9 @@ namespace BlogProjectOnion.Application.Services.Concrete
             return map;
         }
 
-        public  async Task<List<GenreDto>> GetAllGenresNonDeletedAsync()
+        public async Task<List<GenreDto>> GetAllGenresNonDeletedAsync()
         {
-            var experiences = await _unıtOfWork.GetRepository<Genre>().GetAllAsync(x => x.Status == Domain.Enums.Status.Active);
+            var experiences = await _unıtOfWork.GetRepository<Genre>().GetAllAsync(x => x.Status == Domain.Enums.Status.Active || x.Status == Domain.Enums.Status.Modified);
             var map = _mapper.Map<List<GenreDto>>(experiences);
             return map;
         }
@@ -60,7 +60,7 @@ namespace BlogProjectOnion.Application.Services.Concrete
         {
             var experience = await _unıtOfWork.GetRepository<Genre>().GetByIDAsync(genreID);
             experience.Status = Domain.Enums.Status.Passive;
-            await _unıtOfWork.GetRepository<Genre>().DeleteAsync(experience);
+            await _unıtOfWork.GetRepository<Genre>().UpdateAsync(experience);
             await _unıtOfWork.SaveAsync();
 
             return experience.Name;
@@ -70,7 +70,7 @@ namespace BlogProjectOnion.Application.Services.Concrete
         {
             var experience = await _unıtOfWork.GetRepository<Genre>().GetByIDAsync(genreID);
             experience.Status = Domain.Enums.Status.Active;
-            await _unıtOfWork.GetRepository<Genre>().DeleteAsync(experience);
+            await _unıtOfWork.GetRepository<Genre>().UpdateAsync(experience);
             await _unıtOfWork.SaveAsync();
 
             return experience.Name;

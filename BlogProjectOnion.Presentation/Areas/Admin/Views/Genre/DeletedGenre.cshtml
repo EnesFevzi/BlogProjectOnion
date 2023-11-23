@@ -1,0 +1,41 @@
+﻿@model List<GenreDto>
+@{
+    ViewData["Title"] = "DeletedGenre";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <h4 class="page-title">Kategori İşlemleri</h4>
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Silinmiş Kategori Listesi</div>
+                    </div>
+                    <div class="card-body">
+
+                        <table class="table mt-3">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Kategori Adı</th>
+                                    <th scope="col">İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        <td><a asp-area="Admin" asp-action="UndoDelete" asp-controller="Genre" asp-route-genreId="@item.GenreID" class="btn btn-outline-success">Geri Al</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

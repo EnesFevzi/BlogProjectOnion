@@ -17,8 +17,8 @@ namespace BlogProjectOnion.Domain.Entities
         public Status Status { get; set; }
 
 
-        public Guid AppUserID { get; set; }
-        public AppUser AppUser { get; set; }
+        public Guid UserID { get; set; }
+        public AppUser User { get; set; }
 
 
         public int PostID { get; set; }

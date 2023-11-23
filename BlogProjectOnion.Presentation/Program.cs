@@ -43,8 +43,8 @@ namespace BlogProjectOnion.Presentation
 
             builder.Services.ConfigureApplicationCookie(config =>
             {
-                config.LoginPath = new PathString("/Admin/Auth/Login");
-                config.LogoutPath = new PathString("/Admin/Auth/Logout");
+                config.LoginPath = new PathString("/Auth/Login");
+                config.LogoutPath = new PathString("/Auth/Logout");
                 config.Cookie = new CookieBuilder
                 {
                     Name = "BlogProjectOnion",
@@ -55,7 +55,7 @@ namespace BlogProjectOnion.Presentation
                 };
                 config.SlidingExpiration = true;
                 config.ExpireTimeSpan = TimeSpan.FromDays(7);
-                config.AccessDeniedPath = new PathString("/Admin/Auth/AccessDenied");
+                config.AccessDeniedPath = new PathString("/Auth/AccessDenied");
 
             });
 

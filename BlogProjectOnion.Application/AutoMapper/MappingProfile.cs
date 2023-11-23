@@ -13,10 +13,7 @@ namespace BlogProjectOnion.Application.AutoMapper
     {
         public MappingProfile()
         {
-            CreateMap<AuthorDto, Author>().ReverseMap();
-            CreateMap<AuthorAddDto, Author>().ReverseMap();
-            CreateMap<AuthorUpdateDto, Author>().ReverseMap();
-            CreateMap<AuthorUpdateDto, AuthorDto>().ReverseMap();
+         
 
             CreateMap<CreateUserDto, AppUser>().ReverseMap();
 
@@ -30,7 +27,7 @@ namespace BlogProjectOnion.Application.AutoMapper
             CreateMap<GenreDto, Genre>().ReverseMap();
             CreateMap<GenreAddDto, Genre>().ReverseMap();
             CreateMap<GenreUpdateDto, Genre>().ReverseMap();
-            CreateMap<GenreUpdateDto, Genre>().ReverseMap();
+            CreateMap<GenreUpdateDto, GenreDto>().ReverseMap();
 
 
             CreateMap<LikeDto, Like>().ReverseMap();

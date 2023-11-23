@@ -16,16 +16,6 @@ namespace BlogProjectOnion.Infrastructure.EntityTypeConfig
             builder.HasKey(u => u.Id);
 
 
-            builder.HasMany(u => u.Comments)
-                .WithOne(c => c.AppUser)
-                .HasForeignKey(c => c.AppUserID)
-                .IsRequired();
-
-            builder.HasMany(u => u.Likes)
-                .WithOne(l => l.AppUser)
-                .HasForeignKey(l => l.AppUserID)
-                .IsRequired();
-
             builder.Property(x => x.UserName).IsRequired(true);
             base.Configure(builder);
 

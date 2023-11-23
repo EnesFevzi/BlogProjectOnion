@@ -53,14 +53,14 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("343f8370-28d4-4ade-91df-7965041b98f1"),
-                            ConcurrencyStamp = "54caaf85-01e9-4061-9e96-fe51aaa0b4ff",
+                            ConcurrencyStamp = "45a2205b-46cb-431e-8593-34f9f320b43d",
                             Name = "Author",
                             NormalizedName = "AUTHOR"
                         },
                         new
                         {
                             Id = new Guid("f0a0b477-42aa-47fd-9e01-a81da466848d"),
-                            ConcurrencyStamp = "ea745170-2bed-43d9-8523-97809c7128d4",
+                            ConcurrencyStamp = "07f17faf-8d36-47b6-ad78-99fddfb45a5d",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -158,43 +158,6 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("BlogProjectOnion.Domain.Entities.Author", b =>
-                {
-                    b.Property<int>("AuthorID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorID"), 1L, 1);
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("AuthorID");
-
-                    b.ToTable("Authors");
-                });
-
             modelBuilder.Entity("BlogProjectOnion.Domain.Entities.Comment", b =>
                 {
                     b.Property<int>("CommentID")
@@ -202,9 +165,6 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentID"), 1L, 1);
-
-                    b.Property<Guid>("AppUserID")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -225,11 +185,14 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("CommentID");
 
-                    b.HasIndex("AppUserID");
-
                     b.HasIndex("PostID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Comments");
                 });
@@ -261,6 +224,22 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                     b.HasKey("GenreID");
 
                     b.ToTable("Genres");
+
+                    b.HasData(
+                        new
+                        {
+                            GenreID = 1,
+                            CreateDate = new DateTime(2023, 11, 23, 16, 6, 36, 110, DateTimeKind.Local).AddTicks(1590),
+                            Name = "ASP.NET Core",
+                            Status = 1
+                        },
+                        new
+                        {
+                            GenreID = 2,
+                            CreateDate = new DateTime(2023, 11, 23, 16, 6, 36, 110, DateTimeKind.Local).AddTicks(1626),
+                            Name = "Visual Studio 2022",
+                            Status = 1
+                        });
                 });
 
             modelBuilder.Entity("BlogProjectOnion.Domain.Entities.Image", b =>
@@ -297,7 +276,7 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                         new
                         {
                             ImageID = new Guid("f71f4b9a-aa60-461d-b398-de31001bf214"),
-                            CreateDate = new DateTime(2023, 11, 22, 15, 58, 54, 137, DateTimeKind.Local).AddTicks(472),
+                            CreateDate = new DateTime(2023, 11, 23, 16, 6, 36, 110, DateTimeKind.Local).AddTicks(1800),
                             FileName = "project-images/defaultPortfolio.jpg",
                             FileType = "image/jpeg",
                             Status = 0
@@ -305,7 +284,7 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                         new
                         {
                             ImageID = new Guid("d16a6ec7-8c50-4ab0-89a5-02b9a551f0fa"),
-                            CreateDate = new DateTime(2023, 11, 22, 15, 58, 54, 137, DateTimeKind.Local).AddTicks(482),
+                            CreateDate = new DateTime(2023, 11, 23, 16, 6, 36, 110, DateTimeKind.Local).AddTicks(1802),
                             FileName = "user-images/user.png",
                             FileType = "image/png",
                             Status = 0
@@ -355,9 +334,6 @@ namespace BlogProjectOnion.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PostID"), 1L, 1);
 
-                    b.Property<int>("AuthorID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -384,13 +360,16 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("PostID");
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("AuthorID");
+                    b.HasKey("PostID");
 
                     b.HasIndex("GenreID");
 
                     b.HasIndex("ImageID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Posts");
                 });
@@ -509,21 +488,21 @@ namespace BlogProjectOnion.Infrastructure.Migrations
 
             modelBuilder.Entity("BlogProjectOnion.Domain.Entities.Comment", b =>
                 {
-                    b.HasOne("BlogProjectOnion.Domain.Entities.AppUser", "AppUser")
-                        .WithMany("Comments")
-                        .HasForeignKey("AppUserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BlogProjectOnion.Domain.Entities.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.HasOne("BlogProjectOnion.Domain.Entities.AppUser", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Post");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BlogProjectOnion.Domain.Entities.Like", b =>
@@ -547,12 +526,6 @@ namespace BlogProjectOnion.Infrastructure.Migrations
 
             modelBuilder.Entity("BlogProjectOnion.Domain.Entities.Post", b =>
                 {
-                    b.HasOne("BlogProjectOnion.Domain.Entities.Author", "Author")
-                        .WithMany("Posts")
-                        .HasForeignKey("AuthorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BlogProjectOnion.Domain.Entities.Genre", "Genre")
                         .WithMany("Posts")
                         .HasForeignKey("GenreID")
@@ -563,11 +536,17 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                         .WithMany("Posts")
                         .HasForeignKey("ImageID");
 
-                    b.Navigation("Author");
+                    b.HasOne("BlogProjectOnion.Domain.Entities.AppUser", "User")
+                        .WithMany("Posts")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Genre");
 
                     b.Navigation("Image");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -626,10 +605,7 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Likes");
-                });
 
-            modelBuilder.Entity("BlogProjectOnion.Domain.Entities.Author", b =>
-                {
                     b.Navigation("Posts");
                 });
 

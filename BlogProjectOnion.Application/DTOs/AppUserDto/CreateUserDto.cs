@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BlogProjectOnion.Application.DTOs.AppUserDto
+﻿namespace BlogProjectOnion.Application.DTOs.AppUserDto
 {
     public class CreateUserDto
     {
-
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EMail { get; set; }

@@ -9,8 +9,13 @@ using System.Threading.Tasks;
 
 namespace BlogProjectOnion.Domain.Entities
 {
-    public class Post:IBaseEntity
+    public class Post : IBaseEntity
     {
+        public Post()
+        {
+            Comments = new List<Comment>();
+            Likes = new List<Like>();
+        }
         public int PostID { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
@@ -21,8 +26,8 @@ namespace BlogProjectOnion.Domain.Entities
         public DateTime? DeletedDate { get; set; }
         public Status Status { get; set; }
 
-        public int AuthorID { get; set; }
-        public Author Author { get; set; }
+        public Guid UserID { get; set; }
+        public AppUser User { get; set; }
 
 
         public int GenreID { get; set; }

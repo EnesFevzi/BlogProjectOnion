@@ -1,14 +1,20 @@
 ﻿using BlogProjectOnion.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlogProjectOnion.Domain.Entities
 {
     public class Image : IBaseEntity
     {
+        public Image()
+        {
+            AppUsers = new List<AppUser>();
+            Posts = new List<Post>();
+
+        }
+        public Image(string fileName, string fileType)
+        {
+            FileName = fileName;
+            FileType = fileType;
+        }
         public Guid ImageID { get; set; }
         public string FileName { get; set; }
         public string FileType { get; set; }

@@ -1,34 +1,44 @@
 ﻿using AutoMapper;
-using BlogProjectOnion.Application.DTOs.GenreDTOs;
 using BlogProjectOnion.Application.DTOs.PostDTOs;
+using BlogProjectOnion.Application.Extensions;
+using BlogProjectOnion.Application.Helpers.Abstract;
 using BlogProjectOnion.Application.Services.Abstract;
 using BlogProjectOnion.Domain.Entities;
+using BlogProjectOnion.Domain.Enums;
 using BlogProjectOnion.Infrastructure.UnitOfWorks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace BlogProjectOnion.Application.Services.Concrete
 {
     public class PostService : IPostService
     {
         private readonly IUnıtOfWork _unıtOfWork;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ClaimsPrincipal _user;
         private readonly IMapper _mapper;
+        private readonly IImageHelper _imageHelper;
 
-        public PostService(IUnıtOfWork unıtOfWork, IMapper mapper)
+        public PostService(IUnıtOfWork unıtOfWork,IHttpContextAccessor httpContextAccessor, IMapper mapper, IImageHelper imageHelper)
         {
             _unıtOfWork = unıtOfWork;
+            _httpContextAccessor = httpContextAccessor;
+            _user = httpContextAccessor.HttpContext.User;
             _mapper = mapper;
+            _imageHelper = imageHelper;
         }
         public async Task CreatePostAsync(PostAddDto postAddDto)
         {
             var map = _mapper.Map<Post>(postAddDto);
+            var userID = _user.GetLoggedInUserId();
+            var imageUpload = await _imageHelper.Upload(postAddDto.Title, postAddDto.Photo, ImageType.Post);
+            Image image = new(imageUpload.FullName, postAddDto.Photo.ContentType);
+            await _unıtOfWork.GetRepository<Image>().CreateAsync(image);
+            map.Image = image;
             await _unıtOfWork.GetRepository<Post>().CreateAsync(map);
             await _unıtOfWork.SaveAsync();
         }
-
+        
         public Task CreatePostWithoutImageAsync(PostAddDto postAddDto)
         {
             throw new NotImplementedException();

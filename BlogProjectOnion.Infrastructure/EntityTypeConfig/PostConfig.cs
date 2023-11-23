@@ -16,17 +16,6 @@ namespace BlogProjectOnion.Infrastructure.EntityTypeConfig
             builder.Property(x => x.Title).IsRequired(true);
             builder.Property(x => x.Content).IsRequired(true);
 
-            builder.HasKey(p => p.PostID);
-
-            builder.HasOne(p => p.Author)
-                .WithMany(a => a.Posts)
-                .HasForeignKey(p => p.AuthorID)
-                .IsRequired();
-
-            builder.HasOne(p => p.Genre)
-                .WithMany(g => g.Posts)
-                .HasForeignKey(p => p.GenreID)
-                .IsRequired();
             base.Configure(builder);
         }
     }

@@ -16,7 +16,6 @@ namespace BlogProjectOnion.Infrastructure.Context
         {
         }
 
-        public DbSet<Author> Authors { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Genre> Genres { get; set; }

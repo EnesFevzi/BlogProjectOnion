@@ -12,7 +12,12 @@ namespace BlogProjectOnion.Application.FluentValidation
     {
         public GenreValidator()
         {
-            
+            RuleFor(x => x.Name)
+               .NotEmpty()
+               .NotNull()
+               .MinimumLength(3)
+               .MaximumLength(150)
+               .WithName("Kategori Başlığı");
         }
     }
 }
