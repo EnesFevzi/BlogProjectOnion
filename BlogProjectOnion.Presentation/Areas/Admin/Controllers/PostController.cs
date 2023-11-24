@@ -3,6 +3,7 @@ using BlogProjectOnion.Application.DTOs.PostDTOs;
 using BlogProjectOnion.Application.ResultMessages;
 using BlogProjectOnion.Application.Services.Abstract;
 using BlogProjectOnion.Domain.Entities;
+using BlogProjectOnion.Presentation.Consts;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
@@ -78,6 +79,40 @@ namespace BlogProjectOnion.Presentation.Areas.Admin.Controllers
             return View(new PostAddDto { Genres = genres });
 
 
+        }
+        [HttpGet]
+        public async Task<IActionResult> Update(int articleId)
+        {
+            var article = await _postService.GetPostWithCategoryNonDeletedAsync(articleId);
+            var genres = await _genreService.GetAllGenresNonDeletedAsync();
+
+            var articleUpdateDto = _mapper.Map<PostUpdateDto>(article);
+            articleUpdateDto.Genres = genres;
+
+            return View(articleUpdateDto);
+        }
+        [HttpPost]
+     
+        public async Task<IActionResult> Update(PostUpdateDto articleUpdateDto)
+        {
+            var map = _mapper.Map<Post>(articleUpdateDto);
+            var result = await _validator.ValidateAsync(map);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(this.ModelState);
+
+            }
+            else
+            {
+                var title = await _postService.UpdatePostAsync(articleUpdateDto);
+                _toastNotification.AddSuccessToastMessage(Messages.Post.Update(title), new ToastrOptions() { Title = "İşlem Başarılı" });
+                return RedirectToAction("Index", "Article", new { Area = "Admin" });
+            }
+
+
+            var genres = await _genreService.GetAllGenresNonDeletedAsync();
+            articleUpdateDto.Genres = genres;
+            return View(articleUpdateDto);
         }
     }
 }

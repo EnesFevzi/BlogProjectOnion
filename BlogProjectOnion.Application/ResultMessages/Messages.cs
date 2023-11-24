@@ -12,19 +12,19 @@ namespace BlogProjectOnion.Application.ResultMessages
         {
             public static string Add(string genreTitle)
             {
-                return $"{genreTitle} başlıklı tecrübe başarıyla eklenmiştir.";
+                return $"{genreTitle} başlıklı kategori başarıyla eklenmiştir.";
             }
             public static string Update(string genreTitle)
             {
-                return $"{genreTitle} başlıklı tecrübe başarıyla güncellenmiştir.";
+                return $"{genreTitle} başlıklı kategori başarıyla güncellenmiştir.";
             }
             public static string Delete(string genreTitle)
             {
-                return $"{genreTitle} başlıklı tecrübe başarıyla silinmiştir.";
+                return $"{genreTitle} başlıklı kategori başarıyla silinmiştir.";
             }
             public static string UndoDelete(string genreTitle)
             {
-                return $"{genreTitle} başlıklı tecrübe başarıyla geri alınmıştır.";
+                return $"{genreTitle} başlıklı kategori başarıyla geri alınmıştır.";
             }
         }
         public static class Post

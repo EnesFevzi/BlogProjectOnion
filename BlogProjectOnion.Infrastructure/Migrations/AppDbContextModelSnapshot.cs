@@ -53,14 +53,14 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("343f8370-28d4-4ade-91df-7965041b98f1"),
-                            ConcurrencyStamp = "45a2205b-46cb-431e-8593-34f9f320b43d",
+                            ConcurrencyStamp = "82131ca2-6d03-4792-978b-22a21e12c67d",
                             Name = "Author",
                             NormalizedName = "AUTHOR"
                         },
                         new
                         {
                             Id = new Guid("f0a0b477-42aa-47fd-9e01-a81da466848d"),
-                            ConcurrencyStamp = "07f17faf-8d36-47b6-ad78-99fddfb45a5d",
+                            ConcurrencyStamp = "7f6824a8-d02d-4f2c-9424-e1aaa8555ac7",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -156,6 +156,52 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("cb94223b-ccb8-4f2f-93d7-0df96a7f065c"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "5ddfeafc-686b-495f-8920-4629a673ada6",
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "superadmin@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Enes Fevzi",
+                            ImageID = new Guid("d16a6ec7-8c50-4ab0-89a5-02b9a551f0fa"),
+                            LastName = "Çiçekli",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "SUPERADMIN@GMAIL.COM",
+                            NormalizedUserName = "SUPERADMIN@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAENpBP0KmI1UlXATwa6M8DB17dRUFxe8X86A54nbVUIJBLIxrnmeRvez2oSxBf6Ygjw==",
+                            PhoneNumber = "+905439999999",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "4e380d65-ef47-4cc1-8ca6-d4920e860802",
+                            Status = 0,
+                            TwoFactorEnabled = false,
+                            UserName = "superadmin@gmail.com"
+                        },
+                        new
+                        {
+                            Id = new Guid("b207b056-26ac-4be9-b6a5-07eb8c9e8d76"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "b81ed44d-b3e4-429e-aeba-a97c780464fd",
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "enssfvvzi@gmail.com",
+                            EmailConfirmed = false,
+                            FirstName = "Admin",
+                            ImageID = new Guid("d16a6ec7-8c50-4ab0-89a5-02b9a551f0fa"),
+                            LastName = "User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ENSSFVVZI@GMAIL.COM",
+                            NormalizedUserName = "ENSSFVVZI@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAECMrMSRrMdHU78uZdKIPJqnntoIhITS4s0jtBjTysHSq804YGCaUEbri+5suVg6Y3A==",
+                            PhoneNumber = "+905439999988",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "0b423e5e-5942-4cf8-b69e-a1ade1fd62bb",
+                            Status = 0,
+                            TwoFactorEnabled = false,
+                            UserName = "enssfvvzi@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("BlogProjectOnion.Domain.Entities.Comment", b =>
@@ -229,14 +275,14 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                         new
                         {
                             GenreID = 1,
-                            CreateDate = new DateTime(2023, 11, 23, 16, 6, 36, 110, DateTimeKind.Local).AddTicks(1590),
+                            CreateDate = new DateTime(2023, 11, 24, 9, 48, 24, 395, DateTimeKind.Local).AddTicks(7021),
                             Name = "ASP.NET Core",
                             Status = 1
                         },
                         new
                         {
                             GenreID = 2,
-                            CreateDate = new DateTime(2023, 11, 23, 16, 6, 36, 110, DateTimeKind.Local).AddTicks(1626),
+                            CreateDate = new DateTime(2023, 11, 24, 9, 48, 24, 395, DateTimeKind.Local).AddTicks(7033),
                             Name = "Visual Studio 2022",
                             Status = 1
                         });
@@ -276,7 +322,7 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                         new
                         {
                             ImageID = new Guid("f71f4b9a-aa60-461d-b398-de31001bf214"),
-                            CreateDate = new DateTime(2023, 11, 23, 16, 6, 36, 110, DateTimeKind.Local).AddTicks(1800),
+                            CreateDate = new DateTime(2023, 11, 24, 9, 48, 24, 395, DateTimeKind.Local).AddTicks(7173),
                             FileName = "project-images/defaultPortfolio.jpg",
                             FileType = "image/jpeg",
                             Status = 0
@@ -284,7 +330,7 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                         new
                         {
                             ImageID = new Guid("d16a6ec7-8c50-4ab0-89a5-02b9a551f0fa"),
-                            CreateDate = new DateTime(2023, 11, 23, 16, 6, 36, 110, DateTimeKind.Local).AddTicks(1802),
+                            CreateDate = new DateTime(2023, 11, 24, 9, 48, 24, 395, DateTimeKind.Local).AddTicks(7175),
                             FileName = "user-images/user.png",
                             FileType = "image/png",
                             Status = 0
@@ -362,6 +408,9 @@ namespace BlogProjectOnion.Infrastructure.Migrations
 
                     b.Property<Guid>("UserID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ViewCount")
+                        .HasColumnType("int");
 
                     b.HasKey("PostID");
 
@@ -451,11 +500,17 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<Guid>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -475,6 +530,25 @@ namespace BlogProjectOnion.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("BlogProjectOnion.Domain.Entities.AppUserRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>");
+
+                    b.HasDiscriminator().HasValue("AppUserRole");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("cb94223b-ccb8-4f2f-93d7-0df96a7f065c"),
+                            RoleId = new Guid("343f8370-28d4-4ade-91df-7965041b98f1")
+                        },
+                        new
+                        {
+                            UserId = new Guid("b207b056-26ac-4be9-b6a5-07eb8c9e8d76"),
+                            RoleId = new Guid("f0a0b477-42aa-47fd-9e01-a81da466848d")
+                        });
                 });
 
             modelBuilder.Entity("BlogProjectOnion.Domain.Entities.AppUser", b =>

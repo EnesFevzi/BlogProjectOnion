@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BlogProjectOnion.Application.DTOs.GenreDTOs;
+using BlogProjectOnion.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,7 +15,11 @@ namespace BlogProjectOnion.Application.DTOs.PostDTOs
         public int PostID { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public string ImagePath { get; set; }
-        public IFormFile UploadPath { get; set; }
+        public DateTime CreateDate { get; set; }
+        public GenreDto Genre { get; set; }
+        public AppUser User { get; set; }
+        public Image Image { get; set; }
+
+        public int ViewCount { get; set; }
     }
 }

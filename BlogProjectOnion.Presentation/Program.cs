@@ -50,7 +50,7 @@ namespace BlogProjectOnion.Presentation
                     Name = "BlogProjectOnion",
                     HttpOnly = true,
                     SameSite = SameSiteMode.Strict,
-                    SecurePolicy = CookieSecurePolicy.SameAsRequest //Always 
+                    SecurePolicy = CookieSecurePolicy.None //Always 
 
                 };
                 config.SlidingExpiration = true;
@@ -68,8 +68,8 @@ namespace BlogProjectOnion.Presentation
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            app.UseHttpsRedirection();
+			app.UseStatusCodePagesWithReExecute("/Auth/Error404/");
+			app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -91,6 +91,7 @@ namespace BlogProjectOnion.Presentation
                 areaName: "Admin",
                 pattern: "{area:exists}/{controller=Home1}/{action=Index}/{id?}"
                 );
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

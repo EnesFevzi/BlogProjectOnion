@@ -116,8 +116,6 @@ namespace BlogProjectOnion.Application.Helpers.Concrete
             {
                 File.Delete(fileToDelete);
             }
-
-
         }
     }
 }

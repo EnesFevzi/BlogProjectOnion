@@ -25,6 +25,7 @@ namespace BlogProjectOnion.Domain.Entities
         public DateTime? UpdateDate { get; set; }
         public DateTime? DeletedDate { get; set; }
         public Status Status { get; set; }
+        public int ViewCount { get; set; } = 0;
 
         public Guid UserID { get; set; }
         public AppUser User { get; set; }

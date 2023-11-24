@@ -18,6 +18,7 @@ namespace BlogProjectOnion.Application.Extensions
             var assembly = Assembly.GetExecutingAssembly();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<ILikeService, LikeService>();
+            services.AddScoped<ISendMailService, SendMailService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IGenreService, GenreService>();
             services.AddScoped<IPostService, PostService>();

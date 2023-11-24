@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BlogProjectOnion.Application.DTOs.AppUserDto;
+using BlogProjectOnion.Application.DTOs.PostDTOs;
+using BlogProjectOnion.Application.ResultMessages;
 using BlogProjectOnion.Application.VMs;
 using BlogProjectOnion.Domain.Entities;
 using BlogProjectOnion.Presentation.Consts;
@@ -7,6 +9,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 
 namespace BlogProjectOnion.Presentation.Controllers
 {
@@ -16,13 +19,15 @@ namespace BlogProjectOnion.Presentation.Controllers
         private readonly SignInManager<AppUser> signInManager;
         private readonly IMapper _mapper;
         private readonly IValidator<CreateUserDto> _loginValidator;
+        private readonly IToastNotification _toastNotification;
 
-        public AuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMapper mapper, IValidator<CreateUserDto> loginValidator)
+        public AuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMapper mapper, IValidator<CreateUserDto> loginValidator, IToastNotification toastNotification)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             _mapper = mapper;
             _loginValidator = loginValidator;
+            _toastNotification = toastNotification;
         }
         [HttpGet]
         public IActionResult Login()
@@ -54,18 +59,21 @@ namespace BlogProjectOnion.Presentation.Controllers
                     }
                     else
                     {
+                        _toastNotification.AddErrorToastMessage("E-posta adresiniz veya şifreniz yanlıştır.", new ToastrOptions { Title = "İşlem Başarısız" });
                         ModelState.AddModelError("", "E-posta adresiniz veya şifreniz yanlıştır.");
                         return View();
                     }
                 }
                 else
                 {
+                    _toastNotification.AddErrorToastMessage("E-posta adresiniz veya şifreniz yanlıştır.", new ToastrOptions { Title = "İşlem Başarısız" });
                     ModelState.AddModelError("", "E-posta adresiniz veya şifreniz yanlıştır.");
                     return View();
                 }
             }
             else
             {
+                _toastNotification.AddErrorToastMessage("E-posta adresiniz veya şifreniz yanlıştır.", new ToastrOptions { Title = "İşlem Başarısız" });
                 ModelState.AddModelError("", "E-posta adresiniz veya şifreniz yanlıştır.");
                 return View();
             }
@@ -106,6 +114,25 @@ namespace BlogProjectOnion.Presentation.Controllers
 
                 ModelState.AddModelError("", "E-posta adresiniz veya şifreniz yanlıştır.");
             }
+            return View();
+        }
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Auth", new { Area = " " });
+        }
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> AccessDenied()
+        {
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Error404()
+        {
             return View();
         }
     }
